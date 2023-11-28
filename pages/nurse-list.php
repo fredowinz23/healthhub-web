@@ -109,6 +109,7 @@
               <thead class="header-item">
                 <th>Username</th>
                 <th>Full Name</th>
+                <th>Department</th>
                 <th>Shifts</th>
                 <th width="10%">Action</th>
               </thead>
@@ -118,6 +119,7 @@
                 <?php
                 $count = 0;
                 foreach ($nurse_list as $row):
+                  $dep = department()->get("Id=$row->departmentId ");
                   $count += 1;
                    ?>
 
@@ -147,6 +149,15 @@
                         </div>
                       </div>
                     </td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="ms-3">
+                            <div class="user-meta-info">
+                              <h6 class="mb-0"><?=$dep->name;?></h6>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
                       <td>
                         <div class="d-flex align-items-center">
                           <div class="ms-3">

@@ -7,6 +7,7 @@ $patientId = $_GET["patientId"];
 $doctor_list = account()->list("role='Doctor'");
 
 $symptom_list = symptom()->list();
+$department_list = department()->list();
 
 ?>
 
@@ -22,18 +23,52 @@ $symptom_list = symptom()->list();
 
         <input type="hidden" name="patientId" value="<?=$patientId?>">
 
-            <div class="form-group">
-                <th class="left-label">Doctor</th>
-                <select class="form-control" name="doctorId" required>
-                  <option value="">--Select Doctor--</option>
-                  <?php foreach ($doctor_list as $row):
-                    $specialty = specialty()->get("Id=$row->drSpecialtyId");
-                     ?>
-                    <option value="<?=$row->Id?>">Dr. <?=$row->firstName;?> <?=$row->firstName;?> - <?=$specialty->name;?></option>
-                  <?php endforeach; ?>
-                </select>
+        <div class="row">
+          <div class="col">
+
+
+                <div class="form-group">
+                    <th class="left-label">Doctor</th>
+                    <select class="form-control" name="doctorId" required>
+                      <option value="">--Select Doctor--</option>
+                      <?php foreach ($doctor_list as $row):
+                        $specialty = specialty()->get("Id=$row->drSpecialtyId");
+                         ?>
+                        <option value="<?=$row->Id?>">Dr. <?=$row->firstName;?> <?=$row->firstName;?> - <?=$specialty->name;?></option>
+                      <?php endforeach; ?>
+                    </select>
+
+                </div>
+          </div>
+
+            <div class="col">
+
+
+                  <div class="form-group">
+                      <th class="left-label">Department</th>
+                      <select class="form-control" name="departmentId" required>
+                        <option value="">--Select Department--</option>
+                        <?php foreach ($department_list as $row):
+                           ?>
+                          <option value="<?=$row->Id?>"><?=$row->name;?></option>
+                        <?php endforeach; ?>
+                      </select>
+
+                  </div>
+            </div>
+
+            <div class="col">
+
+
+              <div class="form-group">
+                  <label for="medications">Room:</label>
+                  <input type="text" name="room" class="form-control" required>
+              </div>
+
 
             </div>
+
+        </div>
 
             <div class="form-group">
                 <label for="reasonForAdmission">Reason for Admission:</label>

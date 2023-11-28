@@ -17,26 +17,42 @@
         <input type="hidden" name="mrId" value="<?=$mrId?>">
         <div class="form-section">
             <div class="form-subsection">
-                <h3>Vital Signs</h3>
-                <label for="temperature">Temperature:</label>
-                <input class="form-control" type="Text" id="temperature" name="temperature" required>
-                <br>
+            <h3>Vital Signs</h3>
+              <div class="row">
+
+                  <div class="col-4">
+                <label for="Cardiac Rate">Time Monitored</label>
+                <input class="form-control" type="time" name="timeAdded" required>
+                </div>
+                <div class="col-4">
+                  <label for="temperature">Temperature:</label>
+                  <input class="form-control" type="number" id="temperature" name="temperature" required>
+                </div>
+                <div class="col-4">
                 <label for="bloodPressure">Blood Pressure:</label>
                 <input class="form-control" type="text" id="bloodPressure" name="bloodPressure" required>
-                <br>
-                <label for="respiratoryRate">Respiratory Rate:</label>
-                <input class="form-control" type="Text" id="respiratoryRate" name="respiratoryRate" required>
-                <br>
-                <label for="oxygen">Oxygen (O₂):</label>
-                <input class="form-control" type="text" id="oxygen" name="oxygen" required>
-                <br>
-                <label for="Cardiac Rate">Cardiac Rate</label>
-                <input class="form-control" type="text" id="Cardiac Rate" name="cardiacRate" required>
-            </div>
+                </div>
+                <div class="col-4">
+              <label for="respiratoryRate">Respiratory Rate:</label>
+              <input class="form-control" type="number" id="respiratoryRate" name="respiratoryRate" required>
+              <br>
+                </div>
+                <div class="col-4">
+              <label for="oxygen">Oxygen (O₂):</label>
+              <input class="form-control" type="number" id="oxygen" name="oxygen" required>
+              <br>
+                </div>
+                <div class="col-4">
+              <label for="Cardiac Rate">Cardiac Rate</label>
+              <input class="form-control" type="number" id="Cardiac Rate" name="cardiacRate" required>
+              </div>
+                </div>
+
+              </div>
             <label for="medications">Medications:</label>
             <textarea class="form-control" id="medications" name="medications" rows="4" required></textarea>
             <br>
-            <label for="observations">Observations:</label>
+            <label for="observations">Progress Notes:</label>
             <textarea class="form-control" id="observations" name="observations" rows="4" required></textarea>
         </div>
 

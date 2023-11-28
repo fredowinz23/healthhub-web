@@ -30,19 +30,93 @@
           </div>
         </div>
       </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <h3>Patient Information</h3>
+
+                <b>Patient Name:</b>
+                <?=$patient->fullName?> <br>
+                  <b>Date Of Birth:</b>
+                  <?=$patient->dob?> <br>
+                    <b>gender:</b>
+                    <?=$patient->gender?> <br>
+            </div>
+
+              <div class="col-6">
+                <h3>Contact Information</h3>
+                  <b>Address:</b>
+                  <?=$patient->address?> <br>
+
+                    <b>City:</b>
+                    <?=$patient->city?> <br>
+                      <b>Phone Number:</b>
+                      <?=$patient->phoneNumber?> <br>
+
+                        <b>Email address:</b>
+                        <?=$patient->email?> <br>
+              </div>
+
+              <div class="col-6">
+                <h3>Emergency Contact</h3>
+
+                  <b>Name:</b>
+                  <?=$patient->emergencyContactName?> <br>
+
+                    <b>Relationship:</b>
+                    <?=$patient->relationship?> <br>
+
+                      <b>Phone Number:</b>
+                      <?=$patient->emergencyPhoneNumber?> <br>
+              </div>
+
+              <div class="col-6">
+                <h3>Insurance Information</h3>
+
+                  <b>INsurance Provider:</b>
+                  <?=$patient->insuranceProvider?> <br>
+
+                    <b>Policy Number:</b>
+                    <?=$patient->policyNumber?> <br>
+
+                      <b>Group Number:</b>
+                      <?=$patient->groupNumber?> <br>
+
+                        <b>Benefactor:</b>
+                        <?=$patient->subscriberName?> <br>
+
+                          <b>Birthday:</b>
+                          <?=$patient->subscriberDob?> <br>
+
+                            <b>ID:</b>
+                            <?=$patient->subscriberId?> <br>
+
+                              <b>Admittion Status:</b>
+                              <?=$patient->status?>
+              </div>
+
+          </div>
+
+
+        </div>
+      </div>
+
+
       <div class="widget-content searchable-container list">
         <!-- --------------------- start Contact ---------------- -->
         <div class="card card-body">
           <div class="row">
             <div class="col-md-4 col-xl-3">
               <form class="position-relative">
-                <input type="text" class="form-control product-search ps-5" id="input-search" placeholder="Search Patient..." />
+                <input type="text" class="form-control product-search ps-5" id="input-search" placeholder="Search Record..." />
                 <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
               </form>
             </div>
             <div class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
               <a href="medical-exam-form.php?patientId=<?=$patientId;?>" class="btn btn-info d-flex align-items-center">
-                <i class="ti ti-users text-white me-1 fs-5"></i> Add New Record
+                <i class="ti ti-users text-white me-1 fs-5"></i> Add New Medical Record
               </a>
             </div>
           </div>
@@ -54,8 +128,9 @@
               <thead class="header-item">
                 <th>#</th>
                 <th>Date</th>
-                <th>Reason for admission</th>
+                <th>Purpose</th>
                 <th>Doctor</th>
+                <th>Orders</th>
                 <th>Status</th>
                 <th width="10%">Action</th>
               </thead>
@@ -66,6 +141,7 @@
                 $count = 0;
                 foreach ($mr_list as $row):
                   $doctor = account()->get("Id=$row->doctorId");
+                  $specialty = specialty()->get("Id=$doctor->drSpecialtyId");
                   $count += 1;
                    ?>
 
@@ -107,7 +183,7 @@
                             <div class="ms-3">
                               <div class="user-meta-info">
                                 <h6 class="user-name mb-0"
-                                ><?=$doctor->firstName;?> <?=$doctor->lastName;?></h6>
+                                >Dr. <?=$doctor->firstName;?> <?=$doctor->lastName;?> (<?=$specialty->name?>)</h6>
                               </div>
                             </div>
                           </div>
@@ -118,11 +194,23 @@
                               <div class="ms-3">
                                 <div class="user-meta-info">
                                   <h6 class="user-name mb-0"
-                                  ><?=$row->status;?></h6>
+                                  ><?=$row->doctorsOrders;?></h6>
                                 </div>
                               </div>
                             </div>
                           </td>
+
+
+                            <td>
+                              <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                  <div class="user-meta-info">
+                                    <h6 class="user-name mb-0"
+                                    ><?=$row->status;?></h6>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
 
                   <td>
                     <div class="action-btn">

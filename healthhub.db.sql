@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version 5.5.5-10.1.34-MariaDB)
-# Date: 2023-11-20 17:24:27
+# Date: 2023-11-29 02:04:08
 # Generator: MySQL-Front 6.1  (Build 1.26)
 
 
@@ -23,13 +23,13 @@ CREATE TABLE `account` (
   `shiftStart` time DEFAULT NULL,
   `shiftEnd` time DEFAULT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPACT;
 
 #
 # Data for table "account"
 #
 
-INSERT INTO `account` VALUES (1,'admin','1234',NULL,NULL,'Active','Admin',NULL,NULL,NULL,NULL,NULL,NULL),(2,'doctor','12','John','Doe','Active','Doctor',NULL,1,NULL,NULL,NULL,NULL),(3,'hnurse','1234','Jane','Gray','Active','Head Nurse',NULL,NULL,NULL,1,'01:30:00','01:30:00'),(4,'nurse','12','James','Reid','Active','Nurse',NULL,NULL,3,1,'01:38:00','13:38:00'),(5,'staffs','574439','qq','bbeee','Inactive','Staff',NULL,NULL,NULL,NULL,NULL,NULL),(6,'qqrr','662608','qw','ew','Inactive','Officer',NULL,NULL,NULL,NULL,NULL,NULL),(7,'sample','677777','rewq','qwer','Inactive','Admin',NULL,NULL,NULL,NULL,NULL,NULL),(8,'Nic','447549','Mike','Santiago','Inactive','Nurse',NULL,NULL,3,0,'07:00:00','16:00:00'),(9,'Mike','123','Mark','Suarez','Active','Nurse',NULL,NULL,3,0,'08:00:00','17:55:00'),(10,'Butch','124003','Dexter','Romualdez','Inactive','Nurse',NULL,NULL,3,0,'21:49:00','18:49:00');
+INSERT INTO `account` VALUES (1,'admin','1234',NULL,NULL,'Active','Admin',NULL,NULL,NULL,NULL,NULL,NULL),(2,'doctor','12','John','Doe','Active','Doctor',NULL,1,NULL,1,NULL,NULL),(3,'hnurse','1234','Jane','Gray','Active','Head Nurse',NULL,NULL,NULL,1,'01:30:00','01:30:00'),(4,'nurse','12','James','Reid','Active','Nurse',NULL,NULL,3,1,'01:38:00','13:38:00'),(5,'staffs','574439','qq','bbeee','Inactive','Staff',NULL,NULL,NULL,1,NULL,NULL),(6,'qqrr','662608','qw','ew','Inactive','Officer',NULL,NULL,NULL,1,NULL,NULL),(7,'sample','677777','rewq','qwer','Inactive','Admin',NULL,NULL,NULL,1,NULL,NULL),(8,'Nic','447549','Mike','Santiago','Inactive','Nurse',NULL,NULL,3,1,'07:00:00','16:00:00'),(9,'Mike','123','Mark','Suarez','Active','Nurse',NULL,NULL,3,1,'08:00:00','17:55:00'),(10,'Butch','124003','Dexter','Romualdez','Inactive','Nurse',NULL,NULL,3,1,'21:49:00','18:49:00'),(11,'Nico','12345','Dominic','Braganza','Active','Nurse',NULL,NULL,3,2,'18:57:00','02:00:00');
 
 #
 # Structure for table "attendance"
@@ -85,8 +85,9 @@ CREATE TABLE `follow_up` (
   `medications` varchar(255) DEFAULT NULL,
   `observations` varchar(255) DEFAULT NULL,
   `recommendations` text,
-  `dateAdded` varchar(255) DEFAULT NULL,
+  `dateAdded` date DEFAULT NULL,
   `monitoredBy` int(11) DEFAULT NULL,
+  `timeAdded` varchar(6) DEFAULT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
@@ -94,7 +95,7 @@ CREATE TABLE `follow_up` (
 # Data for table "follow_up"
 #
 
-INSERT INTO `follow_up` VALUES (1,1,'kjhkj','hkjhkj','hkj','hkjh','kjhkj','hkjh','kjhkjh','kjhkj','2023-11-14 11:04:43',2),(2,2,'qq','lkjklj','kjlkj','lkjklj','lkjklj','lkjlkj','lkjklj','lkjklj','2023-11-14 12:42:23',2),(3,2,'kjhkjh','kjhkjh','jkhkjh','kjhkjh','kjhkjh','kjhkjh','kjhkjhk','kjhkj','2023-11-14 12:43:09',2),(4,2,'kjhjkh','kjhkjh','kjhkj','hkjh','kjhkjh','kjhkj','kjhkj','hkjhkj','2023-11-14 12:50:54',2),(5,2,'kjhkjh','kjhkjh','kjhkjh','kjhkjh','kjhkjh','kjhkjh','kjhkjh','kjhkj','2023-11-14 12:51:50',4),(6,3,'40','160','50','80','70','Alnix','Patient is having problems breathing','Assess','2023-11-14 19:04:49',9);
+INSERT INTO `follow_up` VALUES (1,3,'36','140/80','50','96','90','Alnix','Patient is now resting ','Observation','2023-11-28',9,'23:00:'),(2,0,'','','','','','','','','2023-11-28',9,'00:00:'),(3,0,'','','','','','','','','2023-11-28',9,'00:00:'),(4,5,'40','140/80','50','96','90','Alnix','Patient is stable','Observation','2023-11-28',9,'23:09:'),(5,5,'40','140/80','50','96','90','qweqweqw','fsfsefsdf','fsdfsdf','2023-11-28',9,'23:58:'),(6,5,'40','140/80','99','96','90','dasdsada','weqweqw','dweqwe','2023-11-29',11,'23:59:'),(7,0,'11','11','11','11','11','11','11','11','2023-11-29',0,'1:45'),(8,0,'11','11','11','11','11','11','11','11','2023-11-29',0,'1:45'),(9,0,'11','11','11','11','11','11','11','11','2023-11-29',4,'1:49'),(10,5,'22','22','22','22','22','22','22','22','2023-11-29',4,'1:50');
 
 #
 # Structure for table "medical_record"
@@ -113,14 +114,17 @@ CREATE TABLE `medical_record` (
   `doctorsOrders` text,
   `dateAdded` date DEFAULT NULL,
   `status` varchar(255) DEFAULT 'Admitted',
+  `room` varchar(255) DEFAULT NULL,
+  `departmentId` int(11) DEFAULT NULL,
+  `nurseId` int(11) DEFAULT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 #
 # Data for table "medical_record"
 #
 
-INSERT INTO `medical_record` VALUES (1,2,2,'kjhkhjk','kjhkjh','kjhkjhkj','Blood Type A+',1,'lkjkljl','2023-11-14','Discharged'),(3,3,2,'suspected allergies','Seafoods, Dust,pollen','Antihestamin','Blood Type A+',3,'rest  adn drink anti allergy meds','2023-11-14','Discharged'),(5,3,2,'asthma','chicken','alnix','Blood Type A+',1,'meds','2023-11-14','Admitted');
+INSERT INTO `medical_record` VALUES (1,2,2,'kjhkhjk','kjhkjh','kjhkjhkj','Blood Type A+',1,'lkjkljl','2023-11-14','Discharged',NULL,1,NULL),(3,3,2,'suspected allergies','Seafoods, Dust,pollen','Antihestamin','Blood Type A+',3,'rest  adn drink anti allergy meds','2023-11-14','Discharged',NULL,1,NULL),(5,3,2,'asthma','chicken','alnix','Blood Type A+',1,'meds','2023-11-14','Admitted',NULL,1,4),(6,3,2,'sdasdasd','asddasda','sadasdas','Blood Type B+',4,'sdadasda','2023-11-28','Admitted','13',1,4),(7,3,2,'sdasdasd','asddasda','sadasdas','Blood Type B+',4,'sdadasda','2023-11-28','Admitted','13',1,9),(8,3,2,'Allergies','Cetirizine','Alnix','Blood Type AB+',4,'Rest','2023-11-28','Admitted','13',1,NULL),(9,0,0,'','','11','',0,'','2023-11-29','Admitted',NULL,NULL,NULL);
 
 #
 # Structure for table "patient"
@@ -153,7 +157,7 @@ CREATE TABLE `patient` (
 # Data for table "patient"
 #
 
-INSERT INTO `patient` VALUES (2,'kjhkjhkj','2023-12-31','Male','lkjkl','jlkjlk','jlkjlk','lkjlkj@sdsdsds.dsd','lkjlkjlk','lkjlkjlk','jlkjlkj','lkjlkj','lkjlkjlk','lkjlkj','lkjlkjkl','2023-12-31','kjhlkjhjl','Discharged'),(3,'Durc  Balasa','1999-10-24','Male','Brgy Paho','Cadiz City','0976342123','durc@gmail.com','Maria Balasa','Mother','0987212134','','','','','','','Admitted');
+INSERT INTO `patient` VALUES (2,'kjhkjhkj','2023-12-31','Male','lkjkl','jlkjlk','jlkjlk','lkjlkj@sdsdsds.dsd','lkjlkjlk','lkjlkjlk','jlkjlkj','lkjlkj','lkjlkjlk','lkjlkj','lkjlkjkl','2023-12-31','kjhlkjhjl','Admitted'),(3,'Durc  Balasa','1999-10-24','Male','Brgy Paho','Cadiz City','0976342123','durc@gmail.com','Maria Balasa','Mother','0987212134','','','','','','','Admitted');
 
 #
 # Structure for table "specialty"

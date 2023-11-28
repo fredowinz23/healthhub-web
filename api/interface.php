@@ -74,6 +74,8 @@ function monitoring_interface($object){
   $response["medications"] = $object->medications;
   $response["observations"] = $object->observations;
   $response["recommendations"] = $object->recommendations;
+  $response["dateAdded"] = $object->dateAdded;
+  $response["timeAdded"] = $object->timeAdded;
   $response["monitoredBy"] = $userObj;
 
   return $response;

@@ -11,6 +11,10 @@ switch ($action) {
 		account_save();
 		break;
 
+	case 'assign-nurse' :
+		assign_nurse();
+		break;
+
 	case 'department-save' :
 		department_save();
 		break;
@@ -60,6 +64,17 @@ switch ($action) {
 		break;
 
 	default :
+}
+
+function assign_nurse(){
+
+	$mrId = $_GET["mrId"];
+
+	$model = medical_record();
+	$model->obj["nurseId"] = $_POST["nurseId"];
+	$model->update("Id=$mrId");
+
+	header('Location: current-patients.php?success=You have assigned a nurse');
 }
 
 function check_out(){
@@ -118,6 +133,8 @@ function new_medical_record(){
 		$model->obj["medications"] = $_POST["medications"];
 		$model->obj["bloodType"] = $_POST["bloodType"];
 		$model->obj["symptomId"] = $_POST["symptomId"];
+		$model->obj["departmentId"] = $_POST["departmentId"];
+		$model->obj["room"] = $_POST["room"];
 		$model->obj["doctorsOrders"] = $_POST["doctorsOrders"];
 		$model->obj["dateAdded"] = "NOW()";
 		$model->create();
@@ -128,7 +145,7 @@ function new_medical_record(){
 
 		$getLast = medical_record()->get("Id>0 order by Id desc limit 1");
 
-		header('Location: monitoring-form.php?mrId=' . $getLast->Id);
+		header('Location: medical-records.php?patientId=' . $_POST["patientId"]);
 
 }
 
@@ -148,6 +165,7 @@ function new_monitoring(){
 		$model->obj["recommendations"] = $_POST["recommendations"];
 		$model->obj["monitoredBy"] = $_SESSION["user_session"]["Id"];
 		$model->obj["dateAdded"] = "NOW()";
+		$model->obj["timeAdded"] = $_POST["timeAdded"];
 		$model->create();
 
 		header('Location: monitoring-list.php?mrId=' . $_POST["mrId"]);

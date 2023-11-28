@@ -126,6 +126,15 @@ $role = $account->role;
               </li>
 
               <li class="sidebar-item">
+                <a class="sidebar-link" href="current-patients.php" aria-expanded="false">
+                  <span>
+                    <i class="ti ti-cards"></i>
+                  </span>
+                  <span class="hide-menu">Current Patients</span>
+                </a>
+              </li>
+
+              <li class="sidebar-item">
                 <a class="sidebar-link" href="nurse-list.php" aria-expanded="false">
                   <span>
                     <i class="ti ti-cards"></i>
@@ -186,11 +195,11 @@ $role = $account->role;
                 </li>
 
                 <li class="sidebar-item">
-                  <a class="sidebar-link" href="patient-list.php" aria-expanded="false">
+                  <a class="sidebar-link" href="assigned-patients.php" aria-expanded="false">
                     <span>
                       <i class="ti ti-cards"></i>
                     </span>
-                    <span class="hide-menu">Patient List  </span>
+                    <span class="hide-menu">Assigned Patients</span>
                   </a>
                 </li>
 

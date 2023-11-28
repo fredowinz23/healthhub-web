@@ -4,10 +4,16 @@
 
   $mrId = $_GET["mrId"];
   $monitoring_list = follow_up()->list("mrId=$mrId");
+  $mr = medical_record()->get("Id=$mrId");
+  $patient = patient()->get("Id=$mr->patientId");
+  $doctor = account()->get("Id=$mr->doctorId");
+  $symptom = symptom()->get("Id=$mr->symptomId");
+  $dep = department()->get("Id=$doctor->departmentId");
 ?>
 
-<br>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  <br>
       <div class="card bg-light-info shadow-none position-relative overflow-hidden">
         <div class="card-body px-4 py-3">
           <div class="row align-items-center">
@@ -28,13 +34,38 @@
           </div>
         </div>
       </div>
+
+      <div class="card">
+        <div class="card-body">
+
+            <h4>Medical Records</h4>
+          <div class="row">
+            <div class="col-6">
+                <b>Doctor:</b> Dr. <?=$doctor->firstName?> <?=$doctor->lastName?> <br>
+                <b>Department:</b> <?=$dep->name?> <br>
+                <b>Room:</b> <?=$mr->room?> <br>
+                <b>Reason for admission:</b> <?=$mr->reasonForAdmission?> <br>
+                <b>Allergies:</b> <?=$mr->allergies?> <br>
+            </div>
+            <div class="col-6">
+
+              <b>Medications:</b> <?=$mr->medications?> <br>
+              <b>Blood Type:</b> <?=$mr->bloodType?> <br>
+              <b>Symptoms:</b> <?=$symptom->name?> <br>
+              <b>Doctor's Order:</b> <?=$mr->doctorsOrders?> <br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
       <div class="widget-content searchable-container list">
         <!-- --------------------- start Contact ---------------- -->
         <div class="card card-body">
           <div class="row">
             <div class="col-md-4 col-xl-3">
               <form class="position-relative">
-                <input type="text" class="form-control product-search ps-5" id="input-search" placeholder="Search Patient..." />
+                <input type="text" class="form-control product-search ps-5" id="input-search" placeholder="Search Monitoring..." />
                 <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
               </form>
             </div>
@@ -46,18 +77,28 @@
           </div>
         </div>
 
+
+<div class="row">
+  <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
         <div class="card card-body">
           <div class="table-responsive">
             <table class="table search-table align-middle text-nowrap">
               <thead class="header-item">
                 <th>#</th>
                 <th>Date</th>
-                <th>Temperature</th>
-                <th>Blood pressure</th>
-                <th>Resperatory Rate</th>
-                <th>Oxygen</th>
-                <th>Cardiac Rate</th>
+                <th>Time</th>
+                <th>Progress Notes</th>
                 <th>Monitored by</th>
+                <th>View</th>
               </thead>
               <tbody>
                 <!-- start row -->
@@ -96,55 +137,23 @@
                           <div class="ms-3">
                             <div class="user-meta-info">
                               <h6 class="user-name mb-0"
-                              ><?=$row->temperature;?></h6>
+                              ><?=$row->timeAdded;?></h6>
                             </div>
                           </div>
                         </div>
                       </td>
 
-                        <td>
-                          <div class="d-flex align-items-center">
-                            <div class="ms-3">
-                              <div class="user-meta-info">
-                                <h6 class="user-name mb-0"
-                                ><?=$row->bloodPressure;?></h6>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
 
                           <td>
                             <div class="d-flex align-items-center">
                               <div class="ms-3">
                                 <div class="user-meta-info">
                                   <h6 class="user-name mb-0"
-                                  ><?=$row->respiratoryRate;?></h6>
+                                  ><?=$row->observations;?></h6>
                                 </div>
                               </div>
                             </div>
                           </td>
-
-                            <td>
-                              <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                  <div class="user-meta-info">
-                                    <h6 class="user-name mb-0"
-                                    ><?=$row->oxygen;?></h6>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-
-                              <td>
-                                <div class="d-flex align-items-center">
-                                  <div class="ms-3">
-                                    <div class="user-meta-info">
-                                      <h6 class="user-name mb-0"
-                                      ><?=$row->cardiacRate;?></h6>
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
 
                                 <td>
                                   <div class="d-flex align-items-center">
@@ -156,6 +165,10 @@
                                     </div>
                                   </div>
                                 </td>
+
+                              <td>
+                                <a href="monitoring-detail.php?Id=<?=$row->Id?>" class="btn btn-primary">View Detail</a>
+                              </td>
 
                 </tr>
                 <!-- end row -->
