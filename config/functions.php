@@ -11,6 +11,10 @@ function format_money($value){
 function format_time_to_12($time){
 	return date('h:i a', strtotime($time));
 }
+function format_date($date){
+	$date=date_create($date);
+ 	return date_format($date,"M d, Y");
+}
 function char_limit($x, $length){
 	$result = $x;
   if(strlen($x)<=$length)

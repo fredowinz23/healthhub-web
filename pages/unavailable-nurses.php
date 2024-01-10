@@ -109,7 +109,9 @@
             <table class="table search-table align-middle text-nowrap">
               <thead class="header-item">
                 <th>#</th>
-                <th>Full Name</th>
+                <th>Nurse</th>
+                <th>Department</th>
+                <th>Days of Work</th>
                 <th>Shifts</th>
               </thead>
               <tbody>
@@ -119,6 +121,7 @@
                 $count = 0;
                 foreach ($nurse_list as $row):
                   $count += 1;
+                  $dep = department()->get("Id=$row->departmentId ");
 
                   $checkAvailableNurse = attendance()->count("date='$dateNow' and nurseId=$row->Id and status='In'");
                   if ($checkAvailableNurse==0) {
@@ -154,7 +157,25 @@
                         <div class="d-flex align-items-center">
                           <div class="ms-3">
                             <div class="user-meta-info">
-                              <h6 class="mb-0"><?=$row->shiftStart;?> to <?=$row->shiftEnd;?></h6>
+                              <h6 class="mb-0"><?=$dep->name;?></h6>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="ms-3">
+                            <div class="user-meta-info">
+                              <h6 class="mb-0"><?=$row->daysOfWork;?></h6>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="ms-3">
+                            <div class="user-meta-info">
+                              <h6 class="mb-0"><?=$row->shift;?></h6>
                             </div>
                           </div>
                         </div>

@@ -143,8 +143,7 @@
                           data-username="<?=$row->username;?>"
                            data-firstName="<?=$row->firstName;?>"
                            data-lastName="<?=$row->lastName;?>"
-                           data-shiftStart="<?=$row->shiftStart;?>"
-                           data-shiftEnd="<?=$row->shiftEnd;?>"
+                           data-shift="<?=$row->shift;?>"
                           ><?=$count;?>.</h6>
                         </div>
                       </div>
@@ -163,7 +162,7 @@
                         <div class="d-flex align-items-center">
                           <div class="ms-3">
                             <div class="user-meta-info">
-                              <h6 class="mb-0"><?=format_time_to_12($row->shiftStart);?> to <?=format_time_to_12($row->shiftEnd);?></h6>
+                              <h6 class="mb-0"><?=$row->shift;?></h6>
                             </div>
                           </div>
                         </div>

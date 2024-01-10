@@ -15,7 +15,7 @@ $department_list = department()->list();
 
 <div class="card">
   <div class="card-header">
-    <h1>Patient Information Form</h1>
+    <h1>Medical Record Form</h1>
   </div>
   <div class="card-body">
 

@@ -3,6 +3,8 @@
   include $ROOT_DIR . "templates/header.php";
 
   $mrId = $_GET["mrId"];
+  $taskId = $_GET["taskId"];
+  $task = task()->get("Id=$taskId");
 ?>
 
 <br>
@@ -13,8 +15,16 @@
   </div>
   <div class="card-body">
 
+    <div class="alert alert-danger" role="alert">
+      <h4>
+        <b>Task:</b>
+        <?=$task->context;?>
+      </h4>
+    </div>
+
     <form method="post" action="process.php?action=new-monitoring">
         <input type="hidden" name="mrId" value="<?=$mrId?>">
+        <input type="hidden" name="taskId" value="<?=$taskId?>">
         <div class="form-section">
             <div class="form-subsection">
             <h3>Vital Signs</h3>
@@ -25,11 +35,11 @@
                 <input class="form-control" type="time" name="timeAdded" required>
                 </div>
                 <div class="col-4">
-                  <label for="temperature">Temperature:</label>
+                  <label for="temperature">Temperature: (°c)</label>
                   <input class="form-control" type="number" id="temperature" name="temperature" required>
                 </div>
                 <div class="col-4">
-                <label for="bloodPressure">Blood Pressure:</label>
+                <label for="bloodPressure">Blood Pressure: (mmHg)</label>
                 <input class="form-control" type="text" id="bloodPressure" name="bloodPressure" required>
                 </div>
                 <div class="col-4">
@@ -43,7 +53,7 @@
               <br>
                 </div>
                 <div class="col-4">
-              <label for="Cardiac Rate">Cardiac Rate</label>
+              <label for="Cardiac Rate">Pulse Rate</label>
               <input class="form-control" type="number" id="Cardiac Rate" name="cardiacRate" required>
               </div>
                 </div>

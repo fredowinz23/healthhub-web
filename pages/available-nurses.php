@@ -109,7 +109,9 @@
             <table class="table search-table align-middle text-nowrap">
               <thead class="header-item">
                 <th>#</th>
-                <th>Full Name</th>
+                <th>Nurse</th>
+                <th>Department</th>
+                <th>Days of Work</th>
                 <th>Shifts</th>
               </thead>
               <tbody>
@@ -119,6 +121,7 @@
                 $count = 0;
                 foreach ($nurse_list as $row):
                   $count += 1;
+                  $dep = department()->get("Id=$row->departmentId ");
 
                   $checkAvailableNurse = attendance()->count("date='$dateNow' and nurseId=$row->Id and status='In'");
                   if ($checkAvailableNurse>0) {
@@ -134,8 +137,6 @@
                           data-username="<?=$row->username;?>"
                            data-firstName="<?=$row->firstName;?>"
                            data-lastName="<?=$row->lastName;?>"
-                           data-shiftStart="<?=$row->shiftStart;?>"
-                           data-shiftEnd="<?=$row->shiftEnd;?>"
                           ><?=$count;?>.</h6>
                         </div>
                       </div>
@@ -154,7 +155,25 @@
                         <div class="d-flex align-items-center">
                           <div class="ms-3">
                             <div class="user-meta-info">
-                              <h6 class="mb-0"><?=$row->shiftStart;?> to <?=$row->shiftEnd;?></h6>
+                              <h6 class="mb-0"><?=$dep->name;?></h6>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="ms-3">
+                            <div class="user-meta-info">
+                              <h6 class="mb-0"><?=$row->daysOfWork;?></h6>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="ms-3">
+                            <div class="user-meta-info">
+                              <h6 class="mb-0"><?=$row->shift;?></h6>
                             </div>
                           </div>
                         </div>
@@ -220,8 +239,6 @@
                     getModal.find("#c-username").val($_name.attr("data-username"));
                     getModal.find("#c-firstName").val($_name.attr("data-firstName"));
                     getModal.find("#c-lastName").val($_name.attr("data-lastName"));
-                    getModal.find("#c-shiftStart").val($_name.attr("data-shiftStart"));
-                    getModal.find("#c-shiftEnd").val($_name.attr("data-shiftEnd"));
 
                     $("#addContactModal").modal("show");
                   });

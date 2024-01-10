@@ -11,7 +11,6 @@
   $dep = department()->get("Id=$doctor->departmentId");
 ?>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <br>
       <div class="card bg-light-info shadow-none position-relative overflow-hidden">
@@ -41,14 +40,15 @@
             <h4>Medical Records</h4>
           <div class="row">
             <div class="col-6">
-                <b>Doctor:</b> Dr. <?=$doctor->firstName?> <?=$doctor->lastName?> <br>
+                <b>Patient:</b><?=$patient->fullName?> <br>
+                  <b>Doctor:</b> Dr. <?=$doctor->firstName?> <?=$doctor->lastName?> <br>
                 <b>Department:</b> <?=$dep->name?> <br>
                 <b>Room:</b> <?=$mr->room?> <br>
                 <b>Reason for admission:</b> <?=$mr->reasonForAdmission?> <br>
-                <b>Allergies:</b> <?=$mr->allergies?> <br>
             </div>
             <div class="col-6">
 
+              <b>Allergies:</b> <?=$mr->allergies?> <br>
               <b>Medications:</b> <?=$mr->medications?> <br>
               <b>Blood Type:</b> <?=$mr->bloodType?> <br>
               <b>Symptoms:</b> <?=$symptom->name?> <br>
@@ -59,43 +59,81 @@
       </div>
 
 
-      <div class="widget-content searchable-container list">
-        <!-- --------------------- start Contact ---------------- -->
-        <div class="card card-body">
-          <div class="row">
-            <div class="col-md-4 col-xl-3">
-              <form class="position-relative">
-                <input type="text" class="form-control product-search ps-5" id="input-search" placeholder="Search Monitoring..." />
-                <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
-              </form>
-            </div>
-            <div class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
-              <a href="monitoring-form.php?mrId=<?=$mrId;?>" class="btn btn-info d-flex align-items-center">
-                <i class="ti ti-users text-white me-1 fs-5"></i> Add New Follow up Monitoring
-              </a>
-            </div>
-          </div>
+        <div>
+          <canvas id="myChart"></canvas>
         </div>
 
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div class="row">
-  <div class="col-4">
-    <div class="card">
-      <div class="card-body">
+        <script>
+          const ctx = document.getElementById('myChart');
+
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: [
+                <?php foreach ($monitoring_list as $row): ?>
+                  '<?=format_date($row->timeAdded);?>, <?=format_time_to_12($row->timeAdded);?>',
+                <?php endforeach; ?>
+              ],
+              datasets: [{
+                label: 'Temperature',
+                data: [
+                    <?php foreach ($monitoring_list as $row):
+                      ?>
+                      <?=$row->temperature?>,
+                    <?php endforeach; ?>
+                ],
+                borderWidth: 1
+              },
+              {
+                label: 'Pulse',
+                data: [
+                    <?php foreach ($monitoring_list as $row):
+                      ?>
+                      <?=$row->cardiacRate?>,
+                    <?php endforeach; ?>
+                ],
+                borderWidth: 1
+              },
+              {
+                label: 'Respiration',
+                data: [
+                    <?php foreach ($monitoring_list as $row):
+                      ?>
+                      <?=$row->respiratoryRate?>,
+                    <?php endforeach; ?>
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        </script>
+
+
+
+    <div class="card mt-3">
+      <div class="card-header">
+        <!-- <a href="monitoring-form.php?mrId=<?=$mrId;?>" class="btn btn-info">
+          <i class="ti ti-users text-white me-1 fs-5"></i> Add New Follow up Monitoring
+        </a> -->
 
       </div>
-    </div>
-  </div>
-</div>
-
 
         <div class="card card-body">
           <div class="table-responsive">
             <table class="table search-table align-middle text-nowrap">
               <thead class="header-item">
                 <th>#</th>
-                <th>Date</th>
-                <th>Time</th>
+                <th>Date /Time</th>
+                <th>Temp</th>
                 <th>Progress Notes</th>
                 <th>Monitored by</th>
                 <th>View</th>
@@ -126,7 +164,7 @@
                         <div class="ms-3">
                           <div class="user-meta-info">
                             <h6 class="user-name mb-0"
-                            ><?=$row->dateAdded;?></h6>
+                            ><?=$row->dateAdded;?>/<?=$row->timeAdded;?></h6>
                           </div>
                         </div>
                       </div>
@@ -137,7 +175,7 @@
                           <div class="ms-3">
                             <div class="user-meta-info">
                               <h6 class="user-name mb-0"
-                              ><?=$row->timeAdded;?></h6>
+                              ><?=$row->temperature;?></h6>
                             </div>
                           </div>
                         </div>

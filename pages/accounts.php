@@ -77,6 +77,9 @@
                           <span class="validation-text text-danger"></span>
                         </div>
                       </div>
+                      <div class="col-md-4 col-password" id="reset-password">
+                        <a href="" id="reset-password-link" class="btn btn-warning">Reset Password</a>
+                      </div>
                       <div class="col-md-6">
                         <div class="mb-3 contact-name">
                           <input type="text" name="firstName" id="c-firstname" class="form-control" placeholder="First Name" required/>
@@ -107,20 +110,6 @@
                     <?php endif; ?>
                     <?php if ($role=="Head Nurse" || $role=="Nurse"): ?>
                       <div class="row">
-                        <div class="col-md-6">
-                          <div class="mb-3 contact-name">
-                            <b>Shift Start</b>
-                            <input type="time" name="shiftStart" id="c-shiftstart" class="form-control" required/>
-                            <span class="validation-text text-danger"></span>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="mb-3 contact-name">
-                            <b>Shift End</b>
-                            <input type="time" name="shiftEnd" id="c-shiftEnd" class="form-control" required/>
-                            <span class="validation-text text-danger"></span>
-                          </div>
-                        </div>
                         <div class="col-md-6">
                           <div class="mb-3 contact-name">
                             <span class="validation-text text-danger"></span>
@@ -207,11 +196,11 @@
                     </td>
                   <td>
                     <div class="action-btn">
-                      <a href="javascript:void(0)" class="text-info edit">
-                        <i class="ti ti-eye fs-5"></i>
+                      <a href="javascript:void(0)" class="btn btn-info edit">
+                        View
                       </a>
-                      <a href="process.php?action=account-delete&Id=<?=$row->Id?>" class="text-dark ms-2">
-                        <i class="ti ti-trash fs-5"></i>
+                      <a href="process.php?action=account-delete&Id=<?=$row->Id?>" class="btn btn-danger ms-2">
+                        Delete
                       </a>
                     </div>
                   </td>
@@ -265,6 +254,8 @@
               $("#addContactModal #btn-add").hide();
               $("#addContactModal #btn-edit").show();
 
+              var resetPassword = document.getElementById("reset-password-link");
+
               // Get Parents
               var getParentItem = $(this).parents(".search-items");
               var getModal = $("#addContactModal");
@@ -278,6 +269,9 @@
               getModal.find("#c-lastName").val($_name.attr("data-lastName"));
               getModal.find("#c-shiftStart").val($_name.attr("data-shiftStart"));
               getModal.find("#c-shiftEnd").val($_name.attr("data-shiftEnd"));
+
+              resetPassword.href = "process.php?action=reset-password&role=<?=$role?>&accountId=" + $_name.attr("data-id");
+
               if ($_name.attr("data-status")=="Inactive") {
                 getModal.find("#c-display-password").val($_name.attr("data-password"));
               }

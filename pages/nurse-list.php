@@ -49,53 +49,55 @@
           <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
               <div class="modal-header d-flex align-items-center">
-                <h5 class="modal-title"><?=$role;?></h5>
+                <h5 class="modal-title" id="modalHeader">Nurse</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-              <form action="process.php?action=account-save" id="addContactModalTitle" method="post">
+              <form action="process.php?action=update-nurse-schedule" id="addContactModalTitle" method="post">
+                <input type="hidden" name="nurseId" id="nurseId">
               <div class="modal-body">
                 <div class="add-contact-box">
                   <div class="add-contact-content">
-                    <div class="row">
-                      <div class="col-md-4">
-                        <div class="mb-3 contact-name">
-                          <input type="hidden" name="Id" id="c-id"/>
-                          <input type="hidden" name="role" value="<?=$role;?>"/>
-                          <input type="text" name="username" id="c-username" class="form-control" placeholder="Username" disabled/>
-                          <span class="validation-text text-danger"></span>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="mb-3 contact-name">
-                          <input type="text" name="firstName" id="c-firstname" class="form-control" placeholder="First Name" disabled/>
-                          <span class="validation-text text-danger"></span>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="mb-3 contact-name">
-                          <input type="text" name="lastName" id="c-lastname" class="form-control" placeholder="Last Name" disabled/>
-                          <span class="validation-text text-danger"></span>
-                        </div>
-                      </div>
-                    </div>
-                    <?php if ($role=="Head Nurse" || $role=="Nurse"): ?>
                       <div class="row">
-                        <div class="col-md-6">
-                          <div class="mb-3 contact-name">
-                            <b>Shift Start</b>
-                            <input type="time" name="shiftStart" id="c-shiftstart" class="form-control" disabled/>
-                            <span class="validation-text text-danger"></span>
+                        <div class="col-md-12">
+                          <div class="row">
+                            <div class="col">
+                              <input class="checkboxes" type="checkbox" name="days[]" value="Mon" required> Mon
+                            </div>
+                            <div class="col">
+                              <input class="checkboxes" type="checkbox" name="days[]" value="Tue" required> Tue
+                            </div>
+                            <div class="col">
+                              <input class="checkboxes" type="checkbox" name="days[]" value="Wed" required> Wed
+                            </div>
+                            <div class="col">
+                              <input class="checkboxes" type="checkbox" name="days[]" value="Thu" required> Thu
+                            </div>
+                            <div class="col">
+                              <input class="checkboxes" type="checkbox" name="days[]" value="Fri" required> Fri
+                            </div>
+                            <div class="col">
+                              <input class="checkboxes" type="checkbox" name="days[]" value="Sat" required> Sat
+                            </div>
+                            <div class="col">
+                              <input class="checkboxes" type="checkbox" name="days[]" value="Sun" required> Sun
+                            </div>
                           </div>
                         </div>
                         <div class="col-md-6">
                           <div class="mb-3 contact-name">
-                            <b>Shift End</b>
-                            <input type="time" name="shiftEnd" id="c-shiftEnd" class="form-control" disabled/>
-                            <span class="validation-text text-danger"></span>
+                            <b>Shift</b>
+                            <select class="form-control" name="shift">
+                              <option value="">--Select--</option>
+                              <option>Morning</option>
+                              <option>Afternoon</option>
+                              <option>Night Shift</option>
+                            </select>
                           </div>
                         </div>
                       </div>
-                    <?php endif; ?>
+                      <div class="card-footer text-end">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                      </div>
                   </div>
                 </div>
               </div>
@@ -107,9 +109,10 @@
           <div class="table-responsive">
             <table class="table search-table align-middle text-nowrap">
               <thead class="header-item">
-                <th>Username</th>
-                <th>Full Name</th>
+                <th>#</th>
+                <th>Nurse</th>
                 <th>Department</th>
+                <th>Days of Work</th>
                 <th>Shifts</th>
                 <th width="10%">Action</th>
               </thead>
@@ -133,9 +136,9 @@
                           data-username="<?=$row->username;?>"
                            data-firstName="<?=$row->firstName;?>"
                            data-lastName="<?=$row->lastName;?>"
-                           data-shiftStart="<?=$row->shiftStart;?>"
-                           data-shiftEnd="<?=$row->shiftEnd;?>"
-                          ><?=$count;?>. <?=$row->username;?></h6>
+                           data-daysOfWork="<?=$row->daysOfWork;?>"
+                           data-shift="<?=$row->shift;?>"
+                          ><?=$count;?></h6>
                         </div>
                       </div>
                     </div>
@@ -162,15 +165,24 @@
                         <div class="d-flex align-items-center">
                           <div class="ms-3">
                             <div class="user-meta-info">
-                              <h6 class="mb-0"><?=$row->shiftStart;?> to <?=$row->shiftEnd;?></h6>
+                              <h6 class="mb-0"><?=$row->daysOfWork;?></h6>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="ms-3">
+                            <div class="user-meta-info">
+                              <h6 class="mb-0"><?=$row->shift;?></h6>
                             </div>
                           </div>
                         </div>
                       </td>
                   <td>
                     <div class="action-btn">
-                      <a href="javascript:void(0)" class="text-info edit btn btn-warning">
-                        View
+                      <a href="javascript:void(0)" class="text-info edit btn btn-warning" style="color:white!important">
+                        Update Schedule
                       </a>
 
                     </div>
@@ -191,6 +203,15 @@
             <script type="text/javascript">
             $(function () {
 
+              var checkboxes = $('.checkboxes');
+              checkboxes.change(function(){
+                  if($('.checkboxes:checked').length>0) {
+                      checkboxes.removeAttr('required');
+                  } else {
+                      checkboxes.attr('required', 'required');
+                  }
+              });
+
                 $("#input-search").on("keyup", function () {
                   var rex = new RegExp($(this).val(), "i");
                   $(".search-table .search-items:not(.header-item)").hide();
@@ -199,24 +220,6 @@
                       return rex.test($(this).text());
                     })
                     .show();
-                });
-
-                $("#btn-add-contact").on("click", function (event) {
-
-                  var $_username = document.getElementById("c-username");
-                  $_username.value = "";
-
-                  var $_generatedpw = Math.floor(Math.random()*899999+100000);
-
-                  var $_password = document.getElementById("c-password");
-                  $_password.value = $_generatedpw;
-
-                  var $_dpassword = document.getElementById("c-display-password");
-                  $_dpassword.value = $_generatedpw;
-
-                  $("#addContactModal #btn-add").show();
-                  $("#addContactModal #btn-edit").hide();
-                  $("#addContactModal").modal("show");
                 });
 
 
@@ -232,13 +235,8 @@
                     // Get List Item Fields
                     var $_name = getParentItem.find(".user-name");
                     // Set Modal Field's Value
-                    getModal.find("#c-id").val($_name.attr("data-id"));
-                    getModal.find("#c-username").val($_name.attr("data-username"));
-                    getModal.find("#c-firstName").val($_name.attr("data-firstName"));
-                    getModal.find("#c-lastName").val($_name.attr("data-lastName"));
-                    getModal.find("#c-shiftStart").val($_name.attr("data-shiftStart"));
-                    getModal.find("#c-shiftEnd").val($_name.attr("data-shiftEnd"));
-
+                    getModal.find("#nurseId").val($_name.attr("data-id"));
+                    document.getElementById("modalHeader").innerHTML = $_name.attr("data-firstName") +" "+$_name.attr("data-lastName");
                     $("#addContactModal").modal("show");
                   });
                 }

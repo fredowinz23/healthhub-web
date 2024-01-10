@@ -11,6 +11,18 @@ switch ($action) {
 		account_save();
 		break;
 
+	case 'task-save' :
+		task_save();
+		break;
+
+	case 'task-delete' :
+		task_delete();
+		break;
+
+	case 'reset-password' :
+		reset_password();
+		break;
+
 	case 'assign-nurse' :
 		assign_nurse();
 		break;
@@ -63,7 +75,37 @@ switch ($action) {
 		check_out();
 		break;
 
+	case 'update-nurse-schedule' :
+		update_nurse_schedule();
+		break;
+
 	default :
+}
+
+function reset_password(){
+	$Id = $_GET["accountId"];
+	$role = $_GET["role"];
+
+	$six_digit_random_number = random_int(100000, 999999);
+
+	$model = account();
+	$model->obj["status"] = "Inactive";
+	$model->obj["password"] = $six_digit_random_number;
+	$model->update("Id=$Id");
+
+	header("Location: accounts.php?role=" . $role . "&success=You have reset the password");
+}
+
+function update_nurse_schedule(){
+	$Id = $_POST["nurseId"];
+
+	$days = implode(', ', $_POST["days"]);
+	$model = account();
+	$model->obj["daysOfWork"] = $days;
+	$model->obj["shift"] = $_POST["shift"];
+	$model->update("Id=$Id");
+
+	header('Location: nurse-list.php');
 }
 
 function assign_nurse(){
@@ -145,7 +187,7 @@ function new_medical_record(){
 
 		$getLast = medical_record()->get("Id>0 order by Id desc limit 1");
 
-		header('Location: medical-records.php?patientId=' . $_POST["patientId"]);
+		header('Location: index.php?success=You have successfully created a new medical record');
 
 }
 
@@ -167,6 +209,11 @@ function new_monitoring(){
 		$model->obj["dateAdded"] = "NOW()";
 		$model->obj["timeAdded"] = $_POST["timeAdded"];
 		$model->create();
+
+		$taskId = $_POST["taskId"];
+		$model = task();
+		$model->obj["status"] = "Done";
+		$model->update("Id=$taskId");
 
 		header('Location: monitoring-list.php?mrId=' . $_POST["mrId"]);
 
@@ -232,15 +279,11 @@ function account_save(){
 
 	if ($_POST["role"]=="Head Nurse") {
 		$model->obj["departmentId"] = $_POST["departmentId"];
-		$model->obj["shiftStart"] = $_POST["shiftStart"];
-		$model->obj["shiftEnd"] = $_POST["shiftEnd"];
 	}
 
 	if ($_POST["role"]=="Nurse") {
 		$model->obj["departmentId"] = $_POST["departmentId"];
 		$model->obj["nHeadNurseId"] = $_POST["nHeadNurseId"];
-		$model->obj["shiftStart"] = $_POST["shiftStart"];
-		$model->obj["shiftEnd"] = $_POST["shiftEnd"];
 	}
 
 	if ($_POST["form-type"] == "add") {
@@ -255,6 +298,41 @@ function account_save(){
 
 	header('Location: accounts.php?role=' . $_POST["role"]);
 }
+
+function task_save(){
+	#Process to save to the database
+
+	$model = task();
+	$model->obj["mrId"] = $_POST["mrId"];
+	$model->obj["context"] = $_POST["context"];
+	$model->obj["hnurseId"] = $_POST["hnurseId"];
+	$model->obj["nurseId"] = $_POST["nurseId"];
+	$model->obj["dateNeeded"] = $_POST["dateNeeded"];
+	$model->obj["timeNeeded"] = $_POST["timeNeeded"];
+	$model->obj["dateAdded"] = "NOW()";
+
+	if ($_POST["form-type"] == "add") {
+		$model->create();
+	}
+
+	if ($_POST["form-type"] == "edit") {
+		$Id = $_POST["Id"];
+		$model->update("Id=$Id");
+	}
+
+	header('Location: nurse-task-detail.php?mrId=' . $_POST["mrId"]);
+}
+
+
+function task_delete(){
+	#Process to save to the database
+
+	$Id = $_GET["Id"];
+	task()->delete("Id=$Id");
+
+	header('Location: nurse-task-detail.php?mrId=' . $_GET["mrId"]);
+}
+
 
 function department_save(){
 	#Process to save to the database

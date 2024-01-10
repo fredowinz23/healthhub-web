@@ -2,7 +2,7 @@
   $ROOT_DIR="../";
   include $ROOT_DIR . "templates/header.php";
 
-  $mr_list = medical_record()->list("status='Admitted'");
+  $mr_list = medical_record()->list("status='Admitted' order by Id desc");
   $nurse_list = account()->list("role='Nurse'");
 ?>
 
@@ -40,11 +40,6 @@
                 <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
               </form>
             </div>
-            <div class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
-              <a href="medical-exam-form.php?patientId=<?=$patientId;?>" class="btn btn-info d-flex align-items-center">
-                <i class="ti ti-users text-white me-1 fs-5"></i> Add New Medical Record
-              </a>
-            </div>
           </div>
         </div>
 
@@ -69,7 +64,7 @@
                 <?php
                 $count = 0;
                 foreach ($mr_list as $row):
-                  $patient = account()->get("Id=$row->patientId");
+                  $patient = patient()->get("Id=$row->patientId");
                   $dep = department()->get("Id=$row->departmentId");
                   $count += 1;
                   if ($row->nurseId!="") {
@@ -77,7 +72,7 @@
                     $nurse = $n->firstName . " " . $n->lastName;
                   }
                   else{
-                    $nurse = "Unassigned";
+                    $nurse = "<i style='color:red'>Unassigned</i>";
                   }
                    ?>
 
@@ -97,7 +92,7 @@
                         <div class="ms-3">
                           <div class="user-meta-info">
                             <h6 class="user-name mb-0"
-                            ><?=$patient->firstName;?> <?=$patient->lastName;?></h6>
+                            ><?=$patient->fullName;?></h6>
                           </div>
                         </div>
                       </div>
@@ -160,7 +155,7 @@
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
                             <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Assign nurse for <?=$patient->firstName;?> <?=$patient->lastName;?></h5>
+                              <h5 class="modal-title" id="exampleModalLabel">Assign nurse for <?=$patient->fullName;?></h5>
                               <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                               </button>

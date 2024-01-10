@@ -19,6 +19,9 @@ include $ROOT_DIR . "templates/header-blank.php";
                               <input class="form-control" id="inputPassword" name="password" type="password" placeholder="Password" />
                               <label for="inputPassword">Password</label>
                           </div>
+
+                          <a href="" onclick="alert('Please Contact Administrator')">Forgot Password</a>
+
                           <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                               <button type="submit" class="btn btn-primary">Login</button>
                           </div>

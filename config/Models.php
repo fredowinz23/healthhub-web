@@ -50,4 +50,10 @@ function follow_up() {
 	return $crud;
 }
 
+function task() {
+	$crud = new CRUD;
+	$crud->table = "task";
+	return $crud;
+}
+
 ?>

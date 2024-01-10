@@ -3,12 +3,26 @@
 session_start();
 include_once($ROOT_DIR . "config/database.php");
 include_once($ROOT_DIR . "config/Models.php");
-$user = $_SESSION["user_session"];
-$username = $user["username"];
-$account = account()->get("username='$username'");
-$role = $account->role;
+if (isset($_SESSION["user_session"])) {
+  $user = $_SESSION["user_session"];
+  $username = $user["username"];
+  $account = account()->get("username='$username'");
+  $role = $account->role;
+
+  $taskCount = task()->count("nurseId=$account->Id and status='Pending'");
+}
+else{
+  header("Location: ../auth/login.php");
+}
+
 
 ?>
+
+<style media="screen">
+.badge{
+  background:red;color:white;padding:3px;border-radius:10px
+}
+</style>
 <html lang="en">
 
 <head>
@@ -17,6 +31,7 @@ $role = $account->role;
   <title>Health Hub</title>
   <link rel="shortcut icon" type="image/png" href="<?=$ROOT_DIR;?>templates/assets/images/logos/favicon.png" />
   <link rel="stylesheet" href="<?=$ROOT_DIR;?>templates/assets/css/styles.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -39,80 +54,60 @@ $role = $account->role;
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
           <ul id="sidebarnav">
             <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
               <span class="hide-menu">Home</span>
             </li>
             <li class="sidebar-item">
               <a class="sidebar-link" href="index.php" aria-expanded="false">
-                <span>
-                  <i class="ti ti-layout-dashboard"></i>
-                </span>
                 <span class="hide-menu">Dashboard</span>
               </a>
             </li>
 
             <?php if ($role=="Admin"): ?>
               <li class="nav-small-cap">
-                <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                 <span class="hide-menu">ACCOUNTS</span>
               </li>
               <li class="sidebar-item">
                 <a class="sidebar-link" href="accounts.php?role=Doctor" aria-expanded="false">
-                  <span>
-                    <i class="ti ti-article"></i>
-                  </span>
+
                   <span class="hide-menu">Doctors</span>
                 </a>
               </li>
               <li class="sidebar-item">
                 <a class="sidebar-link" href="accounts.php?role=Head Nurse" aria-expanded="false">
-                  <span>
-                    <i class="ti ti-alert-circle"></i>
-                  </span>
+
                   <span class="hide-menu">Head Nurses</span>
                 </a>
               </li>
               <li class="sidebar-item">
                 <a class="sidebar-link" href="accounts.php?role=Nurse" aria-expanded="false">
-                  <span>
-                    <i class="ti ti-cards"></i>
-                  </span>
+
                   <span class="hide-menu">Nurses</span>
                 </a>
               </li>
               <li class="sidebar-item">
                 <a class="sidebar-link" href="accounts.php?role=Admin" aria-expanded="false">
-                  <span>
-                    <i class="ti ti-file-description"></i>
-                  </span>
+
                   <span class="hide-menu">Admins</span>
                 </a>
               </li>
               <li class="nav-small-cap">
-                <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                 <span class="hide-menu">SETTINGS</span>
               </li>
               <li class="sidebar-item">
                 <a class="sidebar-link" href="specialty.php" aria-expanded="false">
-                  <span>
-                    <i class="ti ti-login"></i>
-                  </span>
+
                   <span class="hide-menu">Specialties</span>
                 </a>
               </li>
               <li class="sidebar-item">
                 <a class="sidebar-link" href="department.php" aria-expanded="false">
-                  <span>
-                    <i class="ti ti-user-plus"></i>
-                  </span>
+
                   <span class="hide-menu">Department</span>
                 </a>
               </li>
               <li class="sidebar-item">
                 <a class="sidebar-link" href="symptoms.php" aria-expanded="false">
-                  <span>
-                    <i class="ti ti-adjustments-alt"></i>
-                  </span>
+
                   <span class="hide-menu">Symptoms</span>
                 </a>
               </li>
@@ -121,43 +116,50 @@ $role = $account->role;
             <?php if ($role=="Head Nurse"): ?>
 
               <li class="nav-small-cap">
-                <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                 <span class="hide-menu">NURSES</span>
               </li>
 
               <li class="sidebar-item">
                 <a class="sidebar-link" href="current-patients.php" aria-expanded="false">
-                  <span>
-                    <i class="ti ti-cards"></i>
-                  </span>
+
                   <span class="hide-menu">Current Patients</span>
                 </a>
               </li>
 
               <li class="sidebar-item">
                 <a class="sidebar-link" href="nurse-list.php" aria-expanded="false">
-                  <span>
-                    <i class="ti ti-cards"></i>
-                  </span>
+
                   <span class="hide-menu">Nurse List</span>
+                </a>
+              </li>
+
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="nurse-schedule.php" aria-expanded="false">
+
+                  <span class="hide-menu">Nurse Schedule</span>
+                </a>
+              </li>
+
+
+
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="nurse-tasks.php" aria-expanded="false">
+
+                  <span class="hide-menu">Nurse Tasks</span>
                 </a>
               </li>
 
 
                 <li class="sidebar-item">
                   <a class="sidebar-link" href="attendance.php" aria-expanded="false">
-                    <span>
-                      <i class="ti ti-cards"></i>
-                    </span>
+
                     <span class="hide-menu">Attendance</span>
                   </a>
                 </li>
 
                 <li class="sidebar-item">
                   <a class="sidebar-link" href="available-nurses.php" aria-expanded="false">
-                    <span>
-                      <i class="ti ti-cards"></i>
-                    </span>
+
                     <span class="hide-menu">Available Nurses</span>
                   </a>
                 </li>
@@ -165,9 +167,7 @@ $role = $account->role;
 
                 <li class="sidebar-item">
                   <a class="sidebar-link" href="unavailable-nurses.php" aria-expanded="false">
-                    <span>
-                      <i class="ti ti-cards"></i>
-                    </span>
+
                     <span class="hide-menu">Unavailable Nurses</span>
                   </a>
                 </li>
@@ -176,47 +176,45 @@ $role = $account->role;
             <?php if ($role=="Nurse"): ?>
 
               <li class="nav-small-cap">
-                <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                 <span class="hide-menu">FORM</span>
               </li>
 
               <li class="sidebar-item">
                 <a class="sidebar-link" href="patient-form.php" aria-expanded="false">
-                  <span>
-                    <i class="ti ti-cards"></i>
-                  </span>
+
                   <span class="hide-menu">Patient Information</span>
                 </a>
               </li>
 
                 <li class="nav-small-cap">
-                  <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                   <span class="hide-menu">RECORDS</span>
                 </li>
 
                 <li class="sidebar-item">
                   <a class="sidebar-link" href="assigned-patients.php" aria-expanded="false">
-                    <span>
-                      <i class="ti ti-cards"></i>
-                    </span>
+
                     <span class="hide-menu">Assigned Patients</span>
                   </a>
                 </li>
 
                 <li class="sidebar-item">
+                  <a class="sidebar-link" href="my-tasks.php" aria-expanded="false">
+
+                    <span class="hide-menu">My tasks</span>
+                    <span class="badge"><?=$taskCount?></span>
+                  </a>
+                </li>
+
+                <li class="sidebar-item">
                   <a class="sidebar-link" href="admitted-patients.php" aria-expanded="false">
-                    <span>
-                      <i class="ti ti-cards"></i>
-                    </span>
+
                     <span class="hide-menu">Admitted Patients  </span>
                   </a>
                 </li>
 
                 <li class="sidebar-item">
                   <a class="sidebar-link" href="patient-history.php" aria-expanded="false">
-                    <span>
-                      <i class="ti ti-cards"></i>
-                    </span>
+
                     <span class="hide-menu">Patient History</span>
                   </a>
                 </li>
@@ -227,63 +225,50 @@ $role = $account->role;
             <?php if ($role=="Doctor"): ?>
 
               <li class="nav-small-cap">
-                <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                 <span class="hide-menu">FORM</span>
               </li>
 
               <li class="sidebar-item">
                 <a class="sidebar-link" href="patient-form.php" aria-expanded="false">
-                  <span>
-                    <i class="ti ti-cards"></i>
-                  </span>
+
                   <span class="hide-menu">Patient Information</span>
                 </a>
               </li>
 
                 <li class="nav-small-cap">
-                  <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                   <span class="hide-menu">RECORDS</span>
                 </li>
 
 
                   <li class="sidebar-item">
                     <a class="sidebar-link" href="patient-list.php" aria-expanded="false">
-                      <span>
-                        <i class="ti ti-cards"></i>
-                      </span>
+
                       <span class="hide-menu">Patient List  </span>
                     </a>
                   </li>
 
                   <li class="sidebar-item">
                     <a class="sidebar-link" href="admitted-patients.php" aria-expanded="false">
-                      <span>
-                        <i class="ti ti-cards"></i>
-                      </span>
+
                       <span class="hide-menu">Admitted Patients  </span>
                     </a>
                   </li>
 
                 <li class="sidebar-item">
                   <a class="sidebar-link" href="patient-history.php" aria-expanded="false">
-                    <span>
-                      <i class="ti ti-cards"></i>
-                    </span>
+
                     <span class="hide-menu">Patient History</span>
                   </a>
                 </li>
 
                 <li class="nav-small-cap">
-                  <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                   <span class="hide-menu">OTHERS</span>
                 </li>
 
 
                 <li class="sidebar-item">
                   <a class="sidebar-link" href="symptoms.php" aria-expanded="false">
-                    <span>
-                      <i class="ti ti-adjustments-alt"></i>
-                    </span>
+
                     <span class="hide-menu">Symptoms</span>
                   </a>
                 </li>
@@ -305,12 +290,6 @@ $role = $account->role;
             <li class="nav-item d-block d-xl-none">
               <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
                 <i class="ti ti-menu-2"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                <i class="ti ti-bell-ringing"></i>
-                <div class="notification bg-primary rounded-circle"></div>
               </a>
             </li>
           </ul>

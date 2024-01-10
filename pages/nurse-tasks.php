@@ -2,22 +2,20 @@
   $ROOT_DIR="../";
   include $ROOT_DIR . "templates/header.php";
 
-  $mr_list = medical_record()->list("status='Admitted' and nurseId=$account->Id");
+  $mr_list = medical_record()->list("status='Admitted' order by Id desc");
   $nurse_list = account()->list("role='Nurse'");
 ?>
 
 <br>
-
-
       <div class="card bg-light-info shadow-none position-relative overflow-hidden">
         <div class="card-body px-4 py-3">
           <div class="row align-items-center">
             <div class="col-9">
-              <h4 class="fw-semibold mb-8">Current Patients</h4>
+              <h4 class="fw-semibold mb-8">Nurse Tasks</h4>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a class="text-muted " href="">Nurses</a></li>
-                  <li class="breadcrumb-item" aria-current="page">Current Patients</li>
+                  <li class="breadcrumb-item" aria-current="page">Nurse Tasks</li>
                 </ol>
               </nav>
             </div>
@@ -52,10 +50,8 @@
               <thead class="header-item">
                 <th>#</th>
                 <th>Patient</th>
-                <th>Department</th>
-                <th>Room</th>
-                <th>Purpose</th>
                 <th>Nurse</th>
+                <th>Tasks</th>
                 <th width="10%">Action</th>
               </thead>
               <tbody>
@@ -65,15 +61,11 @@
                 $count = 0;
                 foreach ($mr_list as $row):
                   $patient = patient()->get("Id=$row->patientId");
-                  $dep = department()->get("Id=$row->departmentId");
+                  $totalTask = task()->count("mrId=$row->Id");
                   $count += 1;
                   if ($row->nurseId!="") {
                     $n = account()->get("Id=$row->nurseId");
                     $nurse = $n->firstName . " " . $n->lastName;
-                  }
-                  else{
-                    $nurse = "Unassigned";
-                  }
                    ?>
 
                 <tr class="search-items">
@@ -103,7 +95,7 @@
                           <div class="ms-3">
                             <div class="user-meta-info">
                               <h6 class="user-name mb-0"
-                              ><?=$dep->name;?></h6>
+                              ><?=$nurse;?></h6>
                             </div>
                           </div>
                         </div>
@@ -114,50 +106,18 @@
                             <div class="ms-3">
                               <div class="user-meta-info">
                                 <h6 class="user-name mb-0"
-                                ><?=$row->room?></h6>
+                                ><?=$totalTask;?></h6>
                               </div>
                             </div>
                           </div>
                         </td>
 
-                          <td>
-                            <div class="d-flex align-items-center">
-                              <div class="ms-3">
-                                <div class="user-meta-info">
-                                  <h6 class="user-name mb-0"
-                                  ><?=$row->reasonForAdmission;?></h6>
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-
-                            <td>
-                              <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                  <div class="user-meta-info">
-                                    <h6 class="user-name mb-0"
-                                    ><?=$nurse;?></h6>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-
-
-
+                      <td>
+                        <a href="nurse-task-detail.php?mrId=<?=$row->Id?>" class="btn btn-primary">View</a>
+                      </td>
                   <td>
-                    <div class="action-btn">
-                      <?php if ($row->status=="Admitted" && $role=="Doctor"): ?>
-                        <a href="process.php?action=check-out&patientId=<?=$patientId?>&mrId=<?=$row->Id?>" class="btn btn-warning">Discharge</a>
-                      <?php endif; ?>
-                      <a href="monitoring-list.php?mrId=<?=$row->Id;?>" class="btn btn-primary">
-                        View Monitoring
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-                <!-- end row -->
 
-              <?php endforeach; ?>
+              <?php } endforeach; ?>
               </tbody>
             </table>
           </div>
